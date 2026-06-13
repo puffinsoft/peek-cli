@@ -1,0 +1,12 @@
+node_modules
+dist
+
+TODO.md
+
+wiki.md
+
+.vscode
+
+.npm-cache
+
+*.xcf
