@@ -1,0 +1,29 @@
+name: "Submit to Web Store"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/extension
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x
+          cache: "npm"
+          cache-dependency-path: src/extension/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the extension
+        run: npm run build
+      - name: Package the extension into a zip artifact
+        run: npm run package
+      - name: Browser Platform Publish
+        uses: PlasmoHQ/bpp@v3
+        with:
+          keys: ${{ secrets.SUBMIT_KEYS }}
+          artifact: src/extension/build/chrome-mv3-prod.zip
