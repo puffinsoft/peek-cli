@@ -9,11 +9,15 @@
     "./**/*.tsx"
   ],
   "compilerOptions": {
+    "types": [
+      "chrome",
+      "node"
+    ],
+    "moduleResolution": "bundler",
     "paths": {
       "~*": [
         "./*"
       ]
-    },
-    "baseUrl": "."
+    }
   }
 }
