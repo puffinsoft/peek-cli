@@ -10,3 +10,5 @@ wiki.md
 .npm-cache
 
 *.xcf
+
+*.tsbuildinfo
