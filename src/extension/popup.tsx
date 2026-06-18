@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { storageKeys } from "~constants";
+import { useCallback, useEffect, useState } from "react";
+import { messageKeys, storageKeys } from "~constants";
 
 type ConnectedStatus = boolean | undefined;
 
@@ -14,18 +14,16 @@ const getCurrentTabId = async () => {
 
 function IndexPopup() {
   const [connected, setConnected] = useState<ConnectedStatus>(undefined);
-  const [result, setResult] = useState("");
-
 
   const show = () => {
     getCurrentTabId().then((id) => {
-      chrome.tabs.sendMessage(id, { type: "show" })
+      chrome.tabs.sendMessage(id, { type: messageKeys.showGlow })
     })
   }
 
   const hide = () => {
     getCurrentTabId().then((id) => {
-      chrome.tabs.sendMessage(id, { type: "hide" })
+      chrome.tabs.sendMessage(id, { type: messageKeys.hideGlow })
     })
   }
 
@@ -67,10 +65,9 @@ function IndexPopup() {
       <button onClick={() => {
         setLoading(true)
         chrome.runtime.sendMessage({
-          type: "setStorage",
+          type: messageKeys.setStorage,
           value
         }).then(() => {
-          console.log('then')
           setLoading(false)
           getConnectedStatus()
         }).catch(console.log)

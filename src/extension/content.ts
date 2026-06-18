@@ -1,4 +1,5 @@
 import type { PlasmoCSConfig } from 'plasmo';
+import { messageKeys } from '~constants';
 
 export const config: PlasmoCSConfig = {
     all_frames: false,
@@ -267,6 +268,6 @@ export interface PeekCLIMessage {
 }
 
 chrome.runtime.onMessage.addListener((message: PeekCLIMessage) => {
-  if(message.type === "show") showOverlay();
-  else if(message.type === "hide") hideOverlay()
+  if(message.type === messageKeys.showGlow) showOverlay();
+  else if(message.type === messageKeys.hideGlow) hideOverlay()
 })
