@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { messageKeys, storageKeys } from "~constants";
+import { messageKeys } from "~constants";
 
 type ConnectedStatus = boolean | undefined;
 
@@ -12,27 +12,30 @@ const getCurrentTabId = async () => {
   return tab.id;
 }
 
+const show = () => {
+  getCurrentTabId().then((id) => {
+    chrome.tabs.sendMessage(id, { type: messageKeys.showGlow })
+  })
+}
+
+const hide = () => {
+  getCurrentTabId().then((id) => {
+    chrome.tabs.sendMessage(id, { type: messageKeys.hideGlow })
+  })
+}
+
 function IndexPopup() {
   const [connected, setConnected] = useState<ConnectedStatus>(undefined);
 
-  const show = () => {
-    getCurrentTabId().then((id) => {
-      chrome.tabs.sendMessage(id, { type: messageKeys.showGlow })
-    })
-  }
-
-  const hide = () => {
-    getCurrentTabId().then((id) => {
-      chrome.tabs.sendMessage(id, { type: messageKeys.hideGlow })
-    })
-  }
-
-  const getConnectedStatus = useCallback(() => {
+  const getConnectedStatus = useCallback((callback?: Function) => {
     setConnected(undefined)
-    chrome.storage.local.get([storageKeys.connected]).then((result) => {
-      setConnected(result[storageKeys.connected] === "true")
-    })
 
+    chrome.runtime.sendMessage({
+      type: messageKeys.status
+    }).then(response => {
+      setConnected(response.connected)
+      callback()
+    })
   }, [])
 
   useEffect(() => {
@@ -47,7 +50,7 @@ function IndexPopup() {
 
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false)
-
+  const [error, setError] = useState("");
 
 
   return (
@@ -59,19 +62,25 @@ function IndexPopup() {
       <button onClick={show}>Show Overlay</button>
       <button onClick={hide}>Hide Overlay</button>
       <hr />
-      <input type="text" value={value} onChange={(e) => {
-        setValue(e.target.value)
-      }}/>
       <button onClick={() => {
-        setLoading(true)
+        setLoading(true);
         chrome.runtime.sendMessage({
-          type: messageKeys.setStorage,
-          value
-        }).then(() => {
-          setLoading(false)
-          getConnectedStatus()
-        }).catch(console.log)
-      }} disabled={loading}>Send to back</button>
+          type: messageKeys.connect
+        }).then(res => {
+            if(res.success){
+              getConnectedStatus(() => {
+                setLoading(false)
+              })
+            } else {
+              setLoading(false)
+              setError(res.message)
+            }
+        })
+        
+      }} disabled={loading}>Connect</button>
+      {error && <p style={{
+        color: "red"
+      }}>{error}</p>}
     </div>
   )
 }

@@ -7,6 +7,9 @@ interface SocketMessage {
     data: string // usually base64
 }
 
+/**
+ * on the express side
+ */
 interface ServerResponse {
     success: boolean;
     message: string | null;
@@ -39,9 +42,9 @@ wss.on('close', () => {
 wss.on('connection', (ws) => {
     ws.isAlive = true;
 
-    ws.on('pong', () => {
-        console.log('pong')
+    console.log('new connection')
 
+    ws.on('pong', () => {
         ws.isAlive = true;
     })
 
