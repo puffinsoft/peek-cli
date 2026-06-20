@@ -1,0 +1,20 @@
+{
+  "name": "peek-cli-server",
+  "version": "0.0.1",
+  "description": "WebSocket server for extension-cli connection for Peek CLI.",
+  "license": "MIT",
+  "author": "Grant",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/ws": "^8.18.1"
+  }
+}
