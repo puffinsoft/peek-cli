@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { messageKeys } from "~constants";
 
+import "./popup.css";
+
+import banner from "data-base64:~assets/banner.png"
+
 type ConnectedStatus = boolean | undefined;
 
 const getCurrentTabId = async () => {
@@ -57,8 +61,14 @@ function IndexPopup() {
   return (
     <div style={{
       width: 400,
-      height: 200
+      height: 200,
+      paddingTop: 10
     }}>
+      <div style={{
+        textAlign: "center"
+      }}>
+        <img src={banner} height={30} />
+      </div>
       <p>Connected: {renderLabel()}</p>
       <button onClick={show}>Show Overlay</button>
       <button onClick={hide}>Hide Overlay</button>
@@ -68,16 +78,16 @@ function IndexPopup() {
         chrome.runtime.sendMessage({
           type: messageKeys.connect
         }).then(res => {
-            if(res.success){
-              getConnectedStatus(() => {
-                setLoading(false)
-              })
-            } else {
+          if (res.success) {
+            getConnectedStatus(() => {
               setLoading(false)
-              setError(res.message)
-            }
+            })
+          } else {
+            setLoading(false)
+            setError(res.message)
+          }
         })
-        
+
       }} disabled={loading}>Connect</button>
       {error && <p style={{
         color: "red"

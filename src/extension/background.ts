@@ -124,16 +124,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 try {
                     await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
                 } catch (error) {
-                    activeWs.send(JSON.stringify({
-                        success: true,
-                        id,
-                        message: "The page you tried to capture exists but is not being tracked by the extension yet. You will need to reload it.",
-                        data: null
-                    }))
+                    // content script not injected
                 }
                 await new Promise((resolve) => setTimeout(resolve, 3000));
-                await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
 
+                try {
+                    await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
+                } catch (error) { }
+                
                 console.log('glow end')
 
                 activeWs.send(JSON.stringify({
