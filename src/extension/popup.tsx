@@ -34,6 +34,7 @@ function IndexPopup() {
       type: messageKeys.status
     }).then(response => {
       setConnected(response.connected)
+
       callback()
     })
   }, [])

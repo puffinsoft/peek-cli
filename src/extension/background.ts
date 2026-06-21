@@ -2,7 +2,34 @@ export { }
 
 import { messageKeys } from "~constants";
 
+import disconnectedIconSrc from "url:./assets/icon_gray.png";
+import connectedIconSrc from "url:./assets/icon_color.png";
+
 let activeWs = null;
+
+chrome.runtime.onStartup.addListener(() => {
+    if (activeWs?.readyState !== WebSocket.OPEN) {
+        chrome.action.setIcon({
+            path: disconnectedIconSrc
+        })
+    } else {
+        chrome.action.setIcon({
+            path: connectedIconSrc
+        })
+    }
+})
+
+chrome.tabs.onActivated.addListener(() => {
+    if (activeWs?.readyState !== WebSocket.OPEN) {
+        chrome.action.setIcon({
+            path: disconnectedIconSrc
+        })
+    } else {
+        chrome.action.setIcon({
+            path: connectedIconSrc
+        })
+    }
+})
 
 const urlMatches = (url: string, match: string) => {
     const parsed = new URL(url)
@@ -61,10 +88,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         activeWs = new WebSocket('ws://localhost:7335');
 
         activeWs.addEventListener('open', () => {
-            sendResponse({
-                success: true,
-                message: null
+            chrome.action.setIcon({
+                path: connectedIconSrc
+            }).then(() => {
+                sendResponse({
+                    success: true,
+                    message: null
+                })
             })
+
         });
 
         activeWs.addEventListener('message', async (event) => {
@@ -85,13 +117,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 await chrome.tabs.update(tab.id, { active: true });
                 // Small delay to ensure the OS / Chrome has rendered the switch visually
                 await new Promise((resolve) => setTimeout(resolve, 150));
-                
-                
+
+
                 const screenshotDataURL = await chrome.tabs.captureVisibleTab()
 
                 try {
-                await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
-                } catch (error){
+                    await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
+                } catch (error) {
                     activeWs.send(JSON.stringify({
                         success: true,
                         id,
@@ -115,10 +147,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         activeWs.addEventListener('close', () => {
             activeWs = null;
+
+            chrome.action.setIcon({
+                path: disconnectedIconSrc
+            })
         })
 
         activeWs.addEventListener('error', () => {
             activeWs = null;
+
+            chrome.action.setIcon({
+                path: disconnectedIconSrc
+            })
         })
 
         setTimeout(() => {
