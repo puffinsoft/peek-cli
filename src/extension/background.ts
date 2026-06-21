@@ -23,6 +23,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             })
         });
 
+        activeWs.addEventListener('message', (event) => {
+            const { id, url } = JSON.parse(event.data);
+            console.log("received " + id + ", " + url)
+
+            setTimeout(() => {
+                activeWs.send(JSON.stringify({
+                    type: "screenshot",
+                    id,
+                    data: "I got " + url
+                }))
+            }, 3000)
+        })
+
         activeWs.addEventListener('close', () => {
             activeWs = null;
         })
