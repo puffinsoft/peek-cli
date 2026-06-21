@@ -12,3 +12,14 @@ select,
 textarea {
   font: inherit;
 }
+
+:root {
+  --md-ref-typeface-brand: "Lexend";
+  --md-ref-typeface-plain: "Lexend";
+
+  --md-sys-color-primary: #6706cf;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-on-surface: #111827;
+  --md-sys-color-outline: #74777f;
+}

@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { messageKeys } from "~constants";
 
+// index.js
+import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
+import '@material/web/checkbox/checkbox.js';
+
 import "./popup.css";
 
 import banner from "data-base64:~assets/banner.png"
@@ -69,6 +74,11 @@ function IndexPopup() {
       }}>
         <img src={banner} height={30} />
       </div>
+
+      <md-outlined-button disabled>
+        Show Overlay
+      </md-outlined-button>
+
       <p>Connected: {renderLabel()}</p>
       <button onClick={show}>Show Overlay</button>
       <button onClick={hide}>Hide Overlay</button>
