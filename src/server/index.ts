@@ -60,6 +60,7 @@ wss.on('connection', (ws) => {
              * OR HANDLE ERROR
              */
             req.json(message)
+            requestMap.delete(message.id)
         }
     })
 })
@@ -87,6 +88,16 @@ app.post('/send', (req: Request, res: Response) => {
         url
     }))
 
+    setTimeout(() => {
+        if(requestMap.has(id)){
+            res.json({
+                success: false,
+                message: "Chrome extension timed out.",
+                data: null
+            })
+            requestMap.delete(id)
+        }
+    }, 10000)
 });
 
 app.listen(7336, () => {

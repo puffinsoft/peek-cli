@@ -30,7 +30,7 @@
       "activeTab"
     ],
     "host_permissions": [
-      "https://*/*"
+      "<all_urls>"
     ]
   }
 }

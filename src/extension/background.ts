@@ -85,8 +85,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 await chrome.tabs.update(tab.id, { active: true });
                 // Small delay to ensure the OS / Chrome has rendered the switch visually
                 await new Promise((resolve) => setTimeout(resolve, 150));
-                console.log("delay")
+                
+                
+                const screenshotDataURL = await chrome.tabs.captureVisibleTab()
+
+                try {
                 await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
+                } catch (error){
+                    activeWs.send(JSON.stringify({
+                        success: true,
+                        id,
+                        message: "The page you tried to capture exists but is not being tracked by the extension yet. You will need to reload it.",
+                        data: null
+                    }))
+                }
                 await new Promise((resolve) => setTimeout(resolve, 3000));
                 await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
 
@@ -96,7 +108,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     success: true,
                     id,
                     message: "Successfully glowed URL " + url,
-                    data: null
+                    data: screenshotDataURL
                 }))
             }
         })
