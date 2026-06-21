@@ -2,9 +2,10 @@
 import { WebSocketServer } from "ws";
 
 interface SocketMessage {
-    type: "screenshot",
+    success: boolean,
+    message: string | null,
     id: string, // every message must be associated w/ request for multi-agent
-    data: string // usually base64
+    data: string | null // usually base64
 }
 
 /**
@@ -45,6 +46,7 @@ wss.on('connection', (ws) => {
     console.log('new connection')
 
     ws.on('pong', () => {
+        console.log('pong')
         ws.isAlive = true;
     })
 
@@ -53,11 +55,11 @@ wss.on('connection', (ws) => {
         console.log('message', message)
         const req = requestMap.get(message.id);
         if(req){
-            req.json({
-                success: true,
-                message: null,
-                data: message.data
-            })
+            /**
+             * HANDLE PROCESSED IMAGE HERE
+             * OR HANDLE ERROR
+             */
+            req.json(message)
         }
     })
 })

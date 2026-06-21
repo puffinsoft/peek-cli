@@ -1,5 +1,5 @@
 /**
- * attached to the type
+ * attached to the type field
  */
 export const messageKeys = {
     showGlow: "show",
@@ -8,4 +8,8 @@ export const messageKeys = {
     connect: "connect",
     disconnect: "disconnect",
     status: "status"
+}
+
+export const storageKeys = {
+    openIfMissing: "open_if_missing"
 }
