@@ -6,6 +6,12 @@
   font-display: swap;
 }
 
+html,
+body {
+  margin: 0;
+  font-family: "Lexend";
+}
+
 button,
 input,
 select,
@@ -21,5 +27,9 @@ textarea {
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-surface: #ffffff;
   --md-sys-color-on-surface: #111827;
-  --md-sys-color-outline: #74777f;
+  --md-sys-color-outline: #ad87d6;
+
+  --md-circular-progress-size: 20px;
+  --md-circular-progress-active-indicator-width: 14;
+  --md-circular-progress-active-indicator-color: #6b7280;
 }

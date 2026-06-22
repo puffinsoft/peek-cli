@@ -164,7 +164,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 activeWs = null;
                 sendResponse({
                     success: false,
-                    message: "Failed to connect to WebSocket server."
+                    message: "Connection failed.\nDid you run start?"
                 })
             }
         }, 1000)

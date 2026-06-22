@@ -23,6 +23,13 @@ type MaterialCheckboxProps = DetailedHTMLProps<
   indeterminate?: boolean;
 };
 
+type MaterialProgressProps = MaterialElementProps & {
+  value?: number;
+  max?: number;
+  indeterminate?: boolean;
+  fourColor?: boolean;
+};
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -30,6 +37,7 @@ declare global {
       "md-outlined-button": MaterialButtonProps;
       "md-text-button": MaterialButtonProps;
       "md-checkbox": MaterialCheckboxProps;
+      "md-circular-progress": MaterialProgressProps;
     }
   }
 }
