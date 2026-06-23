@@ -82,7 +82,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         data: null
                     }))
                 } else {
-                    console.log('glow start')
                     const { tab, prevTab } = targetTab;
                     await chrome.windows.update(tab.windowId, { focused: true });
                     await chrome.tabs.update(tab.id, { active: true });
@@ -97,13 +96,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     } catch (error) {
                         // content script not injected
                     }
-                    await new Promise((resolve) => setTimeout(resolve, 3000));
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
 
                     try {
                         await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
                     } catch (error) { }
 
-                    console.log('glow end')
 
                     activeWs.send(JSON.stringify({
                         success: true,
@@ -112,6 +110,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         data: screenshotDataURL
                     }))
 
+                    await new Promise((resolve) => setTimeout(resolve, 600));
                     if (tab.id !== prevTab.id) {
                         await chrome.windows.update(prevTab.windowId, { focused: true });
                         await chrome.tabs.update(prevTab.id, { active: true });
