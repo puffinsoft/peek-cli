@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { messageKeys } from "~constants";
+import { messageKeys } from "~utils/constants";
 
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
@@ -27,9 +27,6 @@ function IndexPopup() {
     })
   }, [])
 
-
-  const renderLabel = () => {
-  }
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("");

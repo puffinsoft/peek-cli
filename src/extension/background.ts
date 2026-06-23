@@ -1,42 +1,15 @@
 export { }
 
-import { messageKeys } from "~constants";
+import { messageKeys } from "~utils/constants";
+import { connectedIcon, disconnectedIcon, updateIconByWs, urlMatches } from "~utils/util";
 
-import disconnectedIconSrc from "url:./assets/icon_gray.png";
-import connectedIconSrc from "url:./assets/icon_color.png";
+
 
 let activeWs = null;
 
-chrome.runtime.onStartup.addListener(() => {
-    if (activeWs?.readyState !== WebSocket.OPEN) {
-        chrome.action.setIcon({
-            path: disconnectedIconSrc
-        })
-    } else {
-        chrome.action.setIcon({
-            path: connectedIconSrc
-        })
-    }
-})
+chrome.runtime.onStartup.addListener(() => updateIconByWs(activeWs))
+chrome.tabs.onActivated.addListener(() => updateIconByWs(activeWs))
 
-chrome.tabs.onActivated.addListener(() => {
-    if (activeWs?.readyState !== WebSocket.OPEN) {
-        chrome.action.setIcon({
-            path: disconnectedIconSrc
-        })
-    } else {
-        chrome.action.setIcon({
-            path: connectedIconSrc
-        })
-    }
-})
-
-const urlMatches = (url: string, match: string) => {
-    const parsed = new URL(url)
-    parsed.hash = '';
-    parsed.search = '';
-    return parsed.toString() === match;
-}
 
 
 /**
@@ -48,7 +21,6 @@ const urlMatches = (url: string, match: string) => {
  * @returns id of matching tab, null if not found.
  * ^ null handling (opening if not found) will be added later.
  */
-// MAKE FUZZY SEARCH BETTER (i.e., trailing /)
 const findTab = async (url: string) => {
     const topTabs = await chrome.tabs.query({
         active: true,
@@ -88,9 +60,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         activeWs = new WebSocket('ws://localhost:7335');
 
         activeWs.addEventListener('open', () => {
-            chrome.action.setIcon({
-                path: connectedIconSrc
-            }).then(() => {
+            connectedIcon().then(() => {
                 sendResponse({
                     success: true,
                     message: null
@@ -100,63 +70,72 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
 
         activeWs.addEventListener('message', async (event) => {
-            const { id, url } = JSON.parse(event.data);
+            const { id, type, url } = JSON.parse(event.data);
 
-            const targetTab = await findTab(url);
-            if (targetTab === null) {
-                activeWs.send(JSON.stringify({
-                    success: false,
-                    id,
-                    message: "Failed to find tab with URL " + url,
-                    data: null
-                }))
-            } else {
-                console.log('glow start')
-                const { tab, prevTab } = targetTab;
-                await chrome.windows.update(tab.windowId, { focused: true });
-                await chrome.tabs.update(tab.id, { active: true });
-                // Small delay to ensure the OS / Chrome has rendered the switch visually
-                await new Promise((resolve) => setTimeout(resolve, 150));
+            if (type === "screenshot") {
+                const targetTab = await findTab(url);
+                if (targetTab === null) {
+                    activeWs.send(JSON.stringify({
+                        success: false,
+                        id,
+                        message: "Failed to find tab with URL " + url,
+                        data: null
+                    }))
+                } else {
+                    console.log('glow start')
+                    const { tab, prevTab } = targetTab;
+                    await chrome.windows.update(tab.windowId, { focused: true });
+                    await chrome.tabs.update(tab.id, { active: true });
+                    // Small delay to ensure the OS / Chrome has rendered the switch visually
+                    await new Promise((resolve) => setTimeout(resolve, 150));
 
 
-                const screenshotDataURL = await chrome.tabs.captureVisibleTab()
+                    const screenshotDataURL = await chrome.tabs.captureVisibleTab()
 
-                try {
-                    await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
-                } catch (error) {
-                    // content script not injected
+                    try {
+                        await chrome.tabs.sendMessage(tab.id, { type: messageKeys.showGlow })
+                    } catch (error) {
+                        // content script not injected
+                    }
+                    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+                    try {
+                        await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
+                    } catch (error) { }
+
+                    console.log('glow end')
+
+                    activeWs.send(JSON.stringify({
+                        success: true,
+                        id,
+                        message: "Successfully glowed URL " + url,
+                        data: screenshotDataURL
+                    }))
+
+                    if (tab.id !== prevTab.id) {
+                        await chrome.windows.update(prevTab.windowId, { focused: true });
+                        await chrome.tabs.update(prevTab.id, { active: true });
+                    }
                 }
-                await new Promise((resolve) => setTimeout(resolve, 3000));
-
-                try {
-                    await chrome.tabs.sendMessage(tab.id, { type: messageKeys.hideGlow })
-                } catch (error) { }
-                
-                console.log('glow end')
+            } else if(type === "urls"){
+                const tabs = await chrome.tabs.query({});
 
                 activeWs.send(JSON.stringify({
                     success: true,
                     id,
-                    message: "Successfully glowed URL " + url,
-                    data: screenshotDataURL
+                    data: tabs.map(e => e.url)
                 }))
             }
         })
 
         activeWs.addEventListener('close', () => {
             activeWs = null;
-
-            chrome.action.setIcon({
-                path: disconnectedIconSrc
-            })
+            disconnectedIcon()
         })
 
         activeWs.addEventListener('error', () => {
             activeWs = null;
-
-            chrome.action.setIcon({
-                path: disconnectedIconSrc
-            })
+            disconnectedIcon()
         })
 
         setTimeout(() => {

@@ -1,6 +1,9 @@
 ﻿import express, { type Request, type Response } from "express";
 import { WebSocketServer } from "ws";
 
+/**
+ * inbound messages from WebSocket
+ */
 interface SocketMessage {
     success: boolean,
     message: string | null,
@@ -9,30 +12,21 @@ interface SocketMessage {
 }
 
 /**
- * on the express side
- */
-interface ServerResponse {
-    success: boolean;
-    message: string | null;
-    data: string | null;
-}
-
-/**
  * identifies request to fulfill w/ ID
  */
 const requestMap: Map<string, Response> = new Map()
 
 const wss = new WebSocketServer({ port: 7335 });
+console.log('WebSocket server started.')
 
 const heartbeatInterval = setInterval(() => {
     wss.clients.forEach(ws => {
-        if(ws.isAlive === false) {
+        if (ws.isAlive === false) {
             return ws.terminate();
         }
 
         ws.isAlive = false;
         ws.ping();
-        console.log('ping')
     })
 }, 20 * 1000)
 
@@ -43,30 +37,74 @@ wss.on('close', () => {
 wss.on('connection', (ws) => {
     ws.isAlive = true;
 
-    console.log('new connection')
-
     ws.on('pong', () => {
-        console.log('pong')
         ws.isAlive = true;
     })
 
     ws.on('message', (raw) => {
         const message: SocketMessage = JSON.parse(raw.toString())
-        console.log('message', message)
         const req = requestMap.get(message.id);
-        if(req){
-            /**
-             * HANDLE PROCESSED IMAGE HERE
-             * OR HANDLE ERROR
-             */
-            req.json(message)
+
+        if (req) {
+            req.json({
+                success: message.success,
+                message: message.message,
+                data: message.data
+            })
             requestMap.delete(message.id)
         }
     })
 })
 
+// ======== EXPRESS ========
+
+/**
+ * express server response
+ */
+interface ServerResponse {
+    success: boolean;
+    message: string | null;
+    data: string | null;
+}
+
+interface OutboundSocketMessage {
+    id: string;
+    type: "screenshot" | "urls",
+    url?: string;
+}
+
 const app = express()
 app.use(express.json())
+
+app.get('/urls', (req: Request, res: Response) => {
+    if (wss.clients.size === 0) {
+        return res.json({
+            success: false,
+            message: "Chrome extension not connected.",
+            data: null
+        })
+    }
+
+    const ws = Array.from(wss.clients)[0];
+    const id = crypto.randomUUID()
+
+    requestMap.set(id, res);
+    ws.send(JSON.stringify({
+        id,
+        type: "urls"
+    }))
+
+    setTimeout(() => {
+        if (requestMap.has(id)) {
+            res.json({
+                success: false,
+                message: "Chrome extension timed out.",
+                data: null
+            })
+            requestMap.delete(id)
+        }
+    }, 10000)
+})
 
 app.post('/send', (req: Request, res: Response) => {
     if (wss.clients.size === 0) {
@@ -85,11 +123,12 @@ app.post('/send', (req: Request, res: Response) => {
     requestMap.set(id, res);
     ws.send(JSON.stringify({
         id,
+        type: "screenshot",
         url
     }))
 
     setTimeout(() => {
-        if(requestMap.has(id)){
+        if (requestMap.has(id)) {
             res.json({
                 success: false,
                 message: "Chrome extension timed out.",
@@ -101,5 +140,5 @@ app.post('/send', (req: Request, res: Response) => {
 });
 
 app.listen(7336, () => {
-    console.log("started express server")
+    console.log("CLI server started.")
 })

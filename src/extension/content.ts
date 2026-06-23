@@ -1,5 +1,5 @@
 import type { PlasmoCSConfig } from 'plasmo';
-import { messageKeys } from '~constants';
+import { messageKeys } from '~utils/constants';
 
 export const config: PlasmoCSConfig = {
     all_frames: false,
