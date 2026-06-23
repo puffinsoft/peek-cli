@@ -6,10 +6,11 @@
   "author": "Grant",
   "type": "module",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "peeked": "./index.ts"
   },
   "dependencies": {
+    "commander": "^15.0.0",
     "express": "^5.2.1",
     "ws": "^8.21.0"
   },
