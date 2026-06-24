@@ -1,13 +1,25 @@
 {
-  "name": "peek-cli-server",
-  "version": "0.1.0",
-  "description": "WebSocket server for extension-cli connection for Peek CLI.",
+  "name": "peeked",
+  "version": "0.0.9",
+  "description": "Connect visual agents with your browser.",
   "license": "MIT",
-  "author": "Grant",
+  "author": "ColonelParrot",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "peeked": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "homepage": "https://github.com/puffinsoft/peek-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puffinsoft/peek-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/puffinsoft/peek-cli/issues"
   },
   "dependencies": {
     "commander": "^15.0.0",
@@ -20,9 +32,5 @@
     "@types/ws": "^8.18.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
-  },
-  "scripts": {
-    "build": "tsup",
-    "typecheck": "tsc --noEmit"
   }
 }
