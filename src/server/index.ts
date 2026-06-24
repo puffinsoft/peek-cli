@@ -7,45 +7,44 @@ const baseUrl = 'http://localhost:7336'
 
 program.name('peeked')
     .description('Connect visual agents with your browser.')
-    .version('0.0.1');
+    .version('0.1.0');
 
-program.argument('[url]', 'The page URL to capture screenshot of.')
-    .option('-l, --list', 'List all tracked URLs.')
-    .action(async (url, options) => {
-        if (options.list) {
-            try {
-                const response = await fetch(`${baseUrl}/urls`)
-                const { success, message, data } = await response.json()
-                if (success) {
-                    console.log(data)
-                } else {
-                    console.error('Failed. ' + message);
-                }
-            } catch (error) {
-                console.log('Server not started. Did you run: peeked begin?')
+program.command('list')
+    .description('List all tracked URLs.')
+    .action(async () => {
+        try {
+            const response = await fetch(`${baseUrl}/urls`)
+            const { success, message, data } = await response.json()
+            if (success) {
+                console.log(data)
+            } else {
+                console.error('Failed. ' + message);
             }
-        } else if (url) {
-            try {
+        } catch (error) {
+            console.log('Server not started. Did you run: peeked begin?')
+        }
+    })
 
-                const response = await fetch(`${baseUrl}/send`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ url: url }),
-                })
+program.command('at <url>')
+    .description('Capture a screenshot of the given URL.')
+    .action(async (url) => {
+        try {
+            const response = await fetch(`${baseUrl}/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url }),
+            })
 
-                const { success, message, data } = await response.json()
-                if (success) {
-                    console.log(data)
-                } else {
-                    console.error('Failed. ' + message);
-                }
-            } catch (error) {
-                console.log('Server not started. Did you run: peeked begin?')
+            const { success, message, data } = await response.json()
+            if (success) {
+                console.log(data)
+            } else {
+                console.error('Failed. ' + message);
             }
-        } else {
-            program.help()
+        } catch (error) {
+            console.log('Server not started. Did you run: peeked begin?')
         }
     })
 

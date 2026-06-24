@@ -1,13 +1,13 @@
 {
   "name": "peek-cli-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "WebSocket server for extension-cli connection for Peek CLI.",
   "license": "MIT",
   "author": "Grant",
   "type": "module",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "bin": {
-    "peeked": "./index.ts"
+    "peeked": "./dist/index.js"
   },
   "dependencies": {
     "commander": "^15.0.0",
@@ -16,6 +16,13 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/ws": "^8.18.1"
+    "@types/node": "^26.0.0",
+    "@types/ws": "^8.18.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
   }
 }
