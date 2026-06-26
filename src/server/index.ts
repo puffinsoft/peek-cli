@@ -2,10 +2,18 @@
 
 
 import { Command } from "commander";
+import fs from 'fs';
+
 declare const __VERSION__: string;
 
 const program = new Command()
 const baseUrl = 'http://localhost:7336'
+
+const tmpDir = path.join(os.tmpdir(), 'peek_cli')
+fs.mkdirSync(tmpDir, { recursive: true })
+
+const tmpImages = path.join(tmpDir, 'images')
+fs.mkdirSync(tmpImages, { recursive: true })
 
 program.name('peeked')
     .description('Connect visual agents with your browser.')
@@ -39,9 +47,14 @@ program.command('at <url>')
                 body: JSON.stringify({ url }),
             })
 
-            const { success, message, data: base64 } = await response.json()
+            const { success, message, data } = await response.json()
             if (success) {
-                console.log(base64)
+                const fileName = crypto.randomUUID().split('-')[0] + '.jpg'
+                const base64 = data.split(';base64,').pop()
+                const buffer = Buffer.from(base64, 'base64')
+                const imagePath = path.join(tmpImages, fileName);
+                fs.writeFileSync(imagePath, buffer);
+                console.log("Image saved to: " + imagePath.toString());
             } else {
                 console.error('Failed. ' + message);
             }
@@ -54,7 +67,6 @@ program.command('at <url>')
 // ==== server.ts logic ====
 
 import os from 'os';
-import fs from 'fs';
 import path, { dirname } from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from "url";
@@ -62,8 +74,8 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const serverPath = path.join(__dirname, 'server.js')
-const pidPath = path.join(os.tmpdir(), '.peek_cli.pid') // create it in the peek-cli folder to add tmp images
-const logPath = path.join(os.tmpdir(), '.peek_cli.log')
+const pidPath = path.join(tmpDir, '.server.pid')
+const logPath = path.join(tmpDir, '.server.log')
 
 program.command('start')
     .description('Start WebSocket server for extension link.')
@@ -99,6 +111,11 @@ program.command('start')
         child.unref()
 
         console.log('Successfully started server.')
+
+        const previousImages = fs.readdirSync(tmpImages, { withFileTypes: true })
+        for(const image of previousImages){
+            if(image.isFile()) fs.unlinkSync(path.join(tmpImages, image.name))
+        }
     })
 
 program.command('stop')
