@@ -1,5 +1,12 @@
 ﻿import express, { type Request, type Response } from "express";
 import { WebSocketServer } from "ws";
+import fs from "fs";
+
+const { pidPath } = process.env
+const cleanup = () => { if (pidPath && fs.existsSync(pidPath)) fs.unlinkSync(pidPath) }
+process.on('SIGTERM', () => { cleanup(); process.exit(0) })
+process.on('SIGINT',  () => { cleanup(); process.exit(0) })
+process.on('exit', cleanup)
 
 /**
  * inbound messages from WebSocket

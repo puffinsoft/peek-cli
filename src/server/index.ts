@@ -39,9 +39,9 @@ program.command('at <url>')
                 body: JSON.stringify({ url }),
             })
 
-            const { success, message, data } = await response.json()
+            const { success, message, data: base64 } = await response.json()
             if (success) {
-                console.log(data)
+                console.log(base64)
             } else {
                 console.error('Failed. ' + message);
             }
@@ -62,15 +62,26 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const serverPath = path.join(__dirname, 'server.js')
-const pidPath = path.join(os.tmpdir(), '.peek_cli.pid')
+const pidPath = path.join(os.tmpdir(), '.peek_cli.pid') // create it in the peek-cli folder to add tmp images
 const logPath = path.join(os.tmpdir(), '.peek_cli.log')
 
 program.command('start')
     .description('Start WebSocket server for extension link.')
     .action(() => {
         if (fs.existsSync(pidPath)) {
-            console.error('WebSocket server already started. Run peeked stop first.');
-            return;
+            const pid = +fs.readFileSync(pidPath, 'utf-8')
+            try {
+                process.kill(pid, 0)
+                console.error('WebSocket server already started. Run peeked stop first.');
+                return;
+            } catch (e: any) {
+                if (e.code === 'ESRCH') {
+                    fs.unlinkSync(pidPath)
+                } else {
+                    console.error('WebSocket server already started. Run peeked stop first.');
+                    return;
+                }
+            }
         }
 
         const out = fs.openSync(logPath, 'a');
@@ -79,6 +90,7 @@ program.command('start')
         const child = spawn('node', [serverPath], {
             detached: true,
             stdio: ['ignore', out, err],
+            env: { ...process.env, pidPath },
         });
 
         if (child.pid) {
