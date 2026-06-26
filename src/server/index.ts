@@ -69,7 +69,7 @@ program.command('start')
     .description('Start WebSocket server for extension link.')
     .action(() => {
         if (fs.existsSync(pidPath)) {
-            console.error('WebSocket server already started.');
+            console.error('WebSocket server already started. Run peeked stop first.');
             return;
         }
 

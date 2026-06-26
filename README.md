@@ -3,18 +3,47 @@
 </p>
 
 <p align="center">
-Give your agents the power of sight. With your own browser.
+<i>peek-cli</i> allows your agents to capture a screenshot of any open tab in your browser.
 </p>
 <p align="center">
-Debug any design, on any platform, any framework. The ultimate agnostic solution.
+Debug the hardest frontend problems, on any platform, any framework. The ultimate agnostic solution.
 </p>
 
 ---
 
 ---
 
-> 💡 **How it works:**
->
-> Peek CLI connects to your browser with a browser extension.
->
-> It streams page or element screenshots to your agent with WebSockets.
+💡 **How it works:** *peek-cli* uses a browser extension to stream screenshots over WebSockets.
+
+### Installation
+
+1. Install the [Chrome Extension](src/extension/README.md).
+
+<sup>the extension is in the process of approval; manual installation is needed for now.</sup>
+
+2. Install the CLI
+
+```
+npm i -g peeked
+```
+
+### Usage
+
+1. Start the *peek-cli* server
+
+```
+peeked start
+```
+
+2. Connect via the browser extension
+
+![](assets/extension.png)
+
+You only need to do this once, on startup.
+
+3. Start your agent!
+
+```bash
+peeked list # view all URLs
+peeked at http://localhost:3000 # capture screenshot
+```
