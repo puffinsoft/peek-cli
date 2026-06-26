@@ -83,6 +83,20 @@ interface OutboundSocketMessage {
 const app = express()
 app.use(express.json())
 
+app.get('/status', (req: Request, res: Response) => {
+    if (wss.clients.size === 0) {
+        return res.json({
+            success: true,
+            data: false
+        })
+    }
+
+    return res.json({
+        success: true,
+        data: true
+    })
+})
+
 app.get('/urls', (req: Request, res: Response) => {
     if (wss.clients.size === 0) {
         return res.json({
@@ -138,7 +152,7 @@ app.post('/send', (req: Request, res: Response) => {
         if (requestMap.has(id)) {
             res.json({
                 success: false,
-                message: "Chrome extension timed out.",
+                message: "Chrome extension timed out. Try focusing on Chrome and trying again.",
                 data: null
             })
             requestMap.delete(id)

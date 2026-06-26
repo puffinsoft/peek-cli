@@ -113,27 +113,44 @@ program.command('start')
         console.log('Successfully started server.')
 
         const previousImages = fs.readdirSync(tmpImages, { withFileTypes: true })
-        for(const image of previousImages){
-            if(image.isFile()) fs.unlinkSync(path.join(tmpImages, image.name))
+        for (const image of previousImages) {
+            if (image.isFile()) fs.unlinkSync(path.join(tmpImages, image.name))
+        }
+    })
+
+program.command('status')
+    .description('Get server & connection status')
+    .action(async () => {
+        try {
+            const response = await fetch(`${baseUrl}/status`)
+
+            const { success, data } = await response.json()
+            if (data === true) {
+                console.log("You're good to go - Server started. Extension connected.")
+            } else {
+                console.log("Server started. Extension not connected.")
+            }
+        } catch (error) {
+            console.log('Server not started. Extension not connected.')
         }
     })
 
 program.command('stop')
     .description('Stops WebSocket server.')
     .action(() => {
-        if(!fs.existsSync(pidPath)){
+        if (!fs.existsSync(pidPath)) {
             console.error('Nothing to stop.')
             return;
         }
 
         const pid = +fs.readFileSync(pidPath, 'utf-8')
-        try{
+        try {
             process.kill(pid, 'SIGTERM')
             console.log('Successfully stopped server.')
-        } catch (error: any){
-            if(error.code === "ESRCH"){
+        } catch (error: any) {
+            if (error.code === "ESRCH") {
                 console.error("Failed to find server process. It may have crashed or been killed already.");
-            } else{
+            } else {
                 console.log("Failed to find server process.")
             }
         }
