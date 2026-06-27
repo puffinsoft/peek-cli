@@ -8,7 +8,7 @@ You cannot see the consequences of your actions. It is important to get incorpor
 
 Iterate & capture often. Capturing a screenshot of a tab is remarkably cheap.
 
-There are four commands:
+These are the commands:
 - `peeked start` - start the WebSocket server for connection w/ the Chrome Extension
 - `peeked stop` - stop the server
 - `peeked status` - get server & connection status.
