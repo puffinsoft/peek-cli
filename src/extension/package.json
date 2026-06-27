@@ -1,8 +1,8 @@
 {
   "name": "peek-cli-extension",
-  "displayName": "Peek cli extension",
-  "version": "0.0.1",
-  "description": "The Chrome Extension for Peek CLI.",
+  "displayName": "peek-cli",
+  "version": "1.0.0",
+  "description": "Connect visual agents with your browser.",
   "author": "Grant <65585002+ColonelParrot@users.noreply.github.com>",
   "scripts": {
     "dev": "plasmo dev",

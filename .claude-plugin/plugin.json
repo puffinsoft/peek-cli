@@ -1,0 +1,9 @@
+{
+    "name": "view-browser-tab",
+    "description": "Screenshot open browser tabs for visual debugging.",
+    "version": "0.1.0",
+    "author": {
+        "name": "ColonelParrot"
+    },
+    "skills": "./skills/"
+}

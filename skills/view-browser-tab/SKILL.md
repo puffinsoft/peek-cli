@@ -1,6 +1,6 @@
 ---
 name: view-browser-tab
-description: Take a screenshot of an open tab in the browser. Great for debugging web designs.
+description: Screenshot open browser tabs for visual debugging.
 license: MIT
 ---
 
@@ -22,3 +22,5 @@ Run `peeked status` at the start of each session.
 Connecting the extension to the server is a manual process that the user needs to perform. Nothing can be done on your end.
 
 Don't run `peeked stop` unless the user asks because reconnecting is a manual process.
+
+Note: running `peeked at` simultaneously is not safe. If you see a glowing border around the screenshot, that is an artifact from the capture process.
