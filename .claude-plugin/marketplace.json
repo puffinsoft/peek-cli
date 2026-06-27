@@ -1,0 +1,13 @@
+{
+    "name": "peek-cli",
+    "owner": {
+        "name": "ColonelParrot"
+    },
+    "plugins": [
+        {
+            "name": "view-browser-tab",
+            "source": "./",
+            "description": "Screenshot open browser tabs for visual debugging."
+        }
+    ]
+}
