@@ -74,4 +74,8 @@ codex plugin marketplace add puffinsoft/peek-cli
 
 ---
 
+### Examples
+
+![](assets/cc.png)
+
 peek-cli is open source software, licensed under the [MIT](LICENSE) license.
