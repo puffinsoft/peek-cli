@@ -12,7 +12,7 @@ peek-cli allows agents to capture a screenshot of any open tab in your browser.
 Works with Claude Code, Codex, Copilot and many more...
 </p>
 
-![](assets/cc.png)
+![](assets/hero.png)
 
 <p align="center">
 It works by using a browser extension to stream screenshots over WebSockets.
@@ -27,8 +27,8 @@ It works by using a browser extension to stream screenshots over WebSockets.
 1. Start the WebSocket daemon:
 
 ```bash
-> peeked start
-Successfully started server.
+peeked start
+> Successfully started server.
 ```
 
 2. Connect your browser:
@@ -38,8 +38,11 @@ Successfully started server.
 3. You're good to go!
 
 ```bash
-> peeked status
-You're good to go - Server started. Extension connected.
+peeked list # view available tabs
+> [ 'http://localhost:3000/' ]
+
+peeked at http://localhost:3000 # capture screenshot
+> Image saved to: /var/.../peek_cli/images/dd999ee0.jpg
 ```
 
 ---

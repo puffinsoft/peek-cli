@@ -137,6 +137,10 @@ function IndexPopup() {
       }}>
         made with ❤️ by <a href="https://github.com/puffinsoft" style={{
           color: "white"
+        }} onClick={() => {
+          chrome.tabs.create({
+            url: "https://github.com/puffinsoft"
+          })
         }}>puffinsoft</a>.
       </div>
     </div>
