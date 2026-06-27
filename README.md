@@ -3,17 +3,46 @@
 </p>
 
 <p align="center">
-<i>peek-cli</i> allows your agents to capture a screenshot of any open tab in your browser.
+peek-cli allows agents to capture a screenshot of any open tab in your browser.
 </p>
+
+---
+
 <p align="center">
-Debug the hardest frontend problems, on any platform, any framework. The ultimate agnostic solution.
+Works with Claude Code, Codex, Copilot and many more...
+</p>
+
+![](assets/cc.png)
+
+<p align="center">
+It works by using a browser extension to stream screenshots over WebSockets.
 </p>
 
 ---
 
----
+### Usage
 
-💡 **How it works:** *peek-cli* uses a browser extension to stream screenshots over WebSockets.
+*You only need to do steps 1 & 2 once on startup.*
+
+1. Start the WebSocket daemon:
+
+```bash
+> peeked start
+Successfully started server.
+```
+
+2. Connect your browser:
+
+<img src="assets/extension.png" width="300">
+
+3. You're good to go!
+
+```bash
+> peeked status
+You're good to go - Server started. Extension connected.
+```
+
+---
 
 ### Installation
 
@@ -23,27 +52,23 @@ Debug the hardest frontend problems, on any platform, any framework. The ultimat
 
 2. Install the CLI
 
-```
+```bash
 npm i -g peeked
 ```
 
-### Usage
+3. Install the Skill
 
-1. Start the *peek-cli* server
-
+For Claude Code & Copilot:
+```bash
+/plugin marketplace add puffinsoft/peek-cli
 ```
-peeked start
-```
 
-2. Connect via the browser extension
-
-![](assets/extension.png)
-
-You only need to do this once, on startup.
-
-3. Start your agent!
+For Codex:
 
 ```bash
-peeked list # view all URLs
-peeked at http://localhost:3000 # capture screenshot
+codex plugin marketplace add puffinsoft/peek-cli
 ```
+
+---
+
+peek-cli is open source software, licensed under the [MIT](LICENSE) license.
