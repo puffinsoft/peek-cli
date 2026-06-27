@@ -26,7 +26,6 @@
   },
   "manifest": {
     "permissions": [
-      "storage",
       "tabs",
       "activeTab"
     ],
