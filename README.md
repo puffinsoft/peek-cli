@@ -20,6 +20,16 @@ It works by using a browser extension to stream screenshots over WebSockets.
 
 ---
 
+### ⚠️ Is this safe?
+
+Yes, 100%. It is impossible for the agent to do anything **but take a screenshot**.
+
+This is because the agent sends *screenshot requests* to the extension through a WebSocket server. It cannot inject any scripts or perform any actions.
+
+We invite you to take a look at the extension [source code](src/extension/background.ts) for added peace of mind.
+
+---
+
 ### Usage
 
 *For security, you need to connect the agent once on every startup.*
