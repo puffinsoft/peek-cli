@@ -22,7 +22,7 @@ It works by using a browser extension to stream screenshots over WebSockets.
 
 ### Usage
 
-*You only need to do steps 1 & 2 once on startup.*
+*You need to do steps 1 & 2 once on every startup.*
 
 1. Start the WebSocket daemon:
 
