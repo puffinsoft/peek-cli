@@ -22,7 +22,7 @@ It works by using a browser extension to stream screenshots over WebSockets.
 
 ### Usage
 
-*You need to do steps 1 & 2 once on every startup.*
+*For security, you need to connect the agent once on every startup.*
 
 1. Start the WebSocket daemon:
 
