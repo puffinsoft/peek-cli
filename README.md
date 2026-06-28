@@ -71,6 +71,7 @@ For Codex:
 
 ```bash
 codex plugin marketplace add puffinsoft/peek-cli
+codex plugin add view-browser-tab@peek-cli
 ```
 
 ---
