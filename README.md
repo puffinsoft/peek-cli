@@ -61,9 +61,10 @@ npm i -g peeked
 
 3. Install the Skill
 
-For Claude Code & Copilot:
+For Claude Code:
 ```bash
 /plugin marketplace add puffinsoft/peek-cli
+/plugin install view-browser-tab@peek-cli
 ```
 
 For Codex:
