@@ -49,9 +49,9 @@ peeked at http://localhost:3000 # capture screenshot
 
 ### Installation
 
-1. Install the [Chrome Extension](src/extension/README.md).
+1. Install the [Chrome Extension](https://chromewebstore.google.com/detail/peek-cli/fekplnpejnpnfmgikkleldnncgickmbb).
 
-<sup>the extension is in the process of approval; manual installation is needed for now.</sup>
+<sup>🎉 the extension has been approved on the Chrome Web Store!</sup>
 
 2. Install the CLI
 

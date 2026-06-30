@@ -1,6 +1,12 @@
 ### Extension Installation
 
-The extension is awaiting approval to go live on the Chrome Web Store. You will have to install it manually for now.
+It is **strongly recommended** to install the version on the [Web Store](https://chromewebstore.google.com/detail/peek-cli/fekplnpejnpnfmgikkleldnncgickmbb).
+
+Building the extension from scratch allows you to use the bleeding-edge version, but it may not be stable.
+
+---
+
+#### Local Build Instructions
 
 This is a [Plasmo extension](https://docs.plasmo.com/) that allows me to use React.
 
