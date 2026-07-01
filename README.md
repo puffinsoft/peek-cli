@@ -14,6 +14,14 @@ Works with Claude Code, Codex, Copilot and many more...
 
 ![](assets/hero.png)
 
+---
+
+<p align="center">
+See it in action:
+</p>
+
+https://github.com/user-attachments/assets/b8b7c90a-2c2f-4ec4-972b-a072a88796ca
+
 <p align="center">
 It works by using a browser extension to stream screenshots over WebSockets.
 </p>
