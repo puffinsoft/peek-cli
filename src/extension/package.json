@@ -1,7 +1,7 @@
 {
   "name": "peek-cli-extension",
   "displayName": "peek-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Connect visual agents with your browser.",
   "author": "Grant <65585002+ColonelParrot@users.noreply.github.com>",
   "scripts": {
