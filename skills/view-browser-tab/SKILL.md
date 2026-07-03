@@ -23,5 +23,6 @@ Connecting the extension to the server is a manual process that the user needs t
 
 Don't run `peeked stop` unless the user asks because reconnecting is a manual process.
 
-Note: run `peeked at` at most two at a time. Simultaneous capturing works but Chrome throttles shots per second.
+`peeked at` is safe to run simultaneously.
+
 If you see a glowing border around the screenshot, that is an artifact from the capture process.
