@@ -79,42 +79,39 @@ const logPath = path.join(tmpDir, '.server.log')
 
 program.command('start')
     .description('Start WebSocket server for extension link.')
-    .action(() => {
-        if (fs.existsSync(pidPath)) {
-            const pid = +fs.readFileSync(pidPath, 'utf-8')
-            try {
-                process.kill(pid, 0)
-                console.error('WebSocket server already started. Run peeked stop first.');
-                return;
-            } catch (e: any) {
-                if (e.code === 'ESRCH') {
-                    fs.unlinkSync(pidPath)
-                } else {
-                    console.error('WebSocket server already started. Run peeked stop first.');
-                    return;
-                }
+    .action(async () => {
+        try {
+            const response = await fetch(`${baseUrl}/status`)
+
+            const { success, data } = await response.json()
+            console.error('WebSocket server already started. Run peeked stop first.');
+        } catch (error) {
+            // start new process
+
+            if (fs.existsSync(pidPath)) {
+                fs.unlinkSync(pidPath);
             }
-        }
 
-        const out = fs.openSync(logPath, 'a');
-        const err = fs.openSync(logPath, 'a');
+            const out = fs.openSync(logPath, 'a');
+            const err = fs.openSync(logPath, 'a');
 
-        const child = spawn('node', [serverPath], {
-            detached: true,
-            stdio: ['ignore', out, err],
-            env: { ...process.env, pidPath },
-        });
+            const child = spawn('node', [serverPath], {
+                detached: true,
+                stdio: ['ignore', out, err],
+                env: { ...process.env, pidPath },
+            });
 
-        if (child.pid) {
-            fs.writeFileSync(pidPath, child.pid.toString(), 'utf-8')
-        }
-        child.unref()
+            if (child.pid) {
+                fs.writeFileSync(pidPath, child.pid.toString(), 'utf-8')
+            }
+            child.unref()
 
-        console.log('Successfully started server.')
+            console.log('Successfully started server.')
 
-        const previousImages = fs.readdirSync(tmpImages, { withFileTypes: true })
-        for (const image of previousImages) {
-            if (image.isFile()) fs.unlinkSync(path.join(tmpImages, image.name))
+            const previousImages = fs.readdirSync(tmpImages, { withFileTypes: true })
+            for (const image of previousImages) {
+                if (image.isFile()) fs.unlinkSync(path.join(tmpImages, image.name))
+            }
         }
     })
 
