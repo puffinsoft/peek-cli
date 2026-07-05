@@ -12,3 +12,5 @@ wiki.md
 *.xcf
 
 *.tsbuildinfo
+
+src/server/README.md

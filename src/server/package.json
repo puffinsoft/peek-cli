@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepack": "node -e \"require('fs').copyFileSync('../../README.md', 'README.md')\""
   },
   "homepage": "https://github.com/puffinsoft/peek-cli#readme",
   "repository": {
