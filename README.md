@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/banner.png" width="400" />
+    <img src="https://raw.githubusercontent.com/puffinsoft/peek-cli/HEAD/assets/banner.png" width="400" />
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@ peek-cli allows agents to capture a screenshot of any open tab in your browser.
 Works with Claude Code, Codex, Copilot and many more...
 </p>
 
-![](assets/hero.png)
+![](https://raw.githubusercontent.com/puffinsoft/peek-cli/HEAD/assets/hero.png)
 
 ---
 
@@ -41,7 +41,7 @@ peeked start
 
 2. Connect your browser:
 
-<img src="assets/extension.png" width="300">
+<img src="https://raw.githubusercontent.com/puffinsoft/peek-cli/HEAD/assets/extension.png" width="300">
 
 3. You're good to go!
 
