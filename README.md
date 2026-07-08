@@ -6,6 +6,10 @@
 peek-cli allows agents to capture a screenshot of any open tab in your browser.
 </p>
 
+<p align="center">
+Your agents can now iterate on frontend designs until they're flawless.
+</p>
+
 ---
 
 <p align="center">
