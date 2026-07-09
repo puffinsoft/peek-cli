@@ -152,13 +152,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     message: null
                 })
             })
-
         });
 
         activeWs.addEventListener('message', async (event) => {
             const { id, type, url } = JSON.parse(event.data);
 
-            if (type === "screenshot") {
+            if (type === "heartbeat") {
+                activeWs.send(JSON.stringify({
+                    id: "heartbeat",
+                }))
+
+                // call chrome.* API to reset timer
+                chrome.runtime.getPlatformInfo();
+            } else if (type === "screenshot") {
                 urlQueue.push({
                     id,
                     url

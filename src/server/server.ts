@@ -5,7 +5,7 @@ import fs from "fs";
 const { pidPath } = process.env
 const cleanup = () => { if (pidPath && fs.existsSync(pidPath)) fs.unlinkSync(pidPath) }
 process.on('SIGTERM', () => { cleanup(); process.exit(0) })
-process.on('SIGINT',  () => { cleanup(); process.exit(0) })
+process.on('SIGINT', () => { cleanup(); process.exit(0) })
 process.on('exit', cleanup)
 
 /**
@@ -34,8 +34,13 @@ const heartbeatInterval = setInterval(() => {
 
         ws.isAlive = false;
         ws.ping();
+
+        ws.send(JSON.stringify({
+            id: "heartbeat",
+            type: "heartbeat"
+        }))
     })
-}, 20 * 1000)
+}, 15 * 1000)
 
 wss.on('close', () => {
     clearInterval(heartbeatInterval)
@@ -44,12 +49,14 @@ wss.on('close', () => {
 wss.on('connection', (ws) => {
     ws.isAlive = true;
 
-    ws.on('pong', () => {
-        ws.isAlive = true;
-    })
-
     ws.on('message', (raw) => {
         const message: SocketMessage = JSON.parse(raw.toString())
+
+        if(message.id === "heartbeat"){
+            ws.isAlive = true;
+            return;
+        }
+
         const req = requestMap.get(message.id);
 
         if (req) {
@@ -76,7 +83,7 @@ interface ServerResponse {
 
 interface OutboundSocketMessage {
     id: string;
-    type: "screenshot" | "urls",
+    type: "screenshot" | "urls" | "heartbeat",
     url?: string;
 }
 
