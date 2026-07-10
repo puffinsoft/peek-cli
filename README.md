@@ -24,7 +24,7 @@ Works with Claude Code, Codex, Copilot and many more...
 See it in action:
 </p>
 
-https://github.com/user-attachments/assets/b8b7c90a-2c2f-4ec4-972b-a072a88796ca
+https://github.com/user-attachments/assets/99c0614a-b622-40cb-8125-cd64ead9833e
 
 <p align="center">
 It works by using a browser extension to stream screenshots over WebSockets.
